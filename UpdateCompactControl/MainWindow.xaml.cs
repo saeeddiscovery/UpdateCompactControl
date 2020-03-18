@@ -4,15 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Net.NetworkInformation;
-using MahApps.Metro.Controls;
 using System.ComponentModel;
 using System.Threading;
 using System.Net;
@@ -69,7 +62,7 @@ namespace UpdateCompactControl
             else
             {
                 lbl_Connection.Content = "Connected";
-                lbl_Connection.Foreground = Brushes.LightGreen;
+                lbl_Connection.Foreground = Brushes.Green;
                 isConnected = true;
             }
         }
