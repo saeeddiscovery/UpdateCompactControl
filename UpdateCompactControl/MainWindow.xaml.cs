@@ -9,6 +9,7 @@ using System.Net.NetworkInformation;
 using System.ComponentModel;
 using System.Threading;
 using System.Net;
+using System.Diagnostics;
 
 namespace UpdateCompactControl
 {
@@ -84,8 +85,16 @@ namespace UpdateCompactControl
             lbl_LocalVersion.Content = "---";
             lbl_LatestVersion.Content = "---";
 
-            int localVer=0, latestVer=0;
+            string localVer="0", latestVer="0";
 
+            string pathToExe = @"E:\Compact Control\Compact Control\Compact Control\bin\Release\Compact Control.exe";
+            var versionInfo = FileVersionInfo.GetVersionInfo(pathToExe);
+            localVer = versionInfo.FileVersion;
+
+            if (localVer != "0")
+                lbl_LocalVersion.Content = versionInfo.FileMajorPart + "." +
+                    versionInfo.FileMinorPart + "." +
+                    versionInfo.FileBuildPart; ;
             /*
             if (localVer == latestVer)
                 btn_Update.IsEnabled = false;
@@ -100,11 +109,11 @@ namespace UpdateCompactControl
             btn_Update.IsEnabled = false;
             Thread thread = new Thread(() => {
                 WebClient client = new WebClient();
-                Uri myUrl = new Uri("http://us.cdn.persiangig.com/download/YXVPvOvzXl/BronchoVision.exe/dl");
+                Uri myUrl = new Uri("http://www.aitintech.ir/wp-content/themes/astra/screenshot.jpg");
                 //client.Credentials = new NetworkCredential("Userid", "mypassword");
                 client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
                 client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                client.DownloadFileAsync(myUrl, @"BronchoVision.exe");
+                client.DownloadFileAsync(myUrl, @"screenshot.jpg");
             });
             thread.Start();
         }
