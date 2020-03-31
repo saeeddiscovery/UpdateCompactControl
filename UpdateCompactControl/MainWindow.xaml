@@ -30,6 +30,6 @@
         <Label Content="Current Version (Yours) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,48,0,97" FontSize="14" Width="165"/>
         <Label x:Name="lbl_LocalVersion" Content="---" VerticalAlignment="Center" Margin="172,48,82,97" FontSize="14" Foreground="#FF008BFF" Background="{x:Null}"/>
         <Label Content="Latest Version (Online) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,74,0,71" FontSize="14" Width="165"/>
-        <Label x:Name="lbl_LatestVersion" Content="---" VerticalAlignment="Center" Margin="172,74,82,71" FontSize="14" Foreground="#FF01FF68"/>
+        <Label x:Name="lbl_onlineVersion" Content="---" VerticalAlignment="Center" Margin="172,74,82,71" FontSize="14" Foreground="#FF01FF68"/>
     </Grid>
 </Window>

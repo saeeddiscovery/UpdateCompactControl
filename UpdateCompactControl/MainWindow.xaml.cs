@@ -10,6 +10,9 @@ using System.ComponentModel;
 using System.Threading;
 using System.Net;
 using System.Diagnostics;
+using System.Net;
+using System.Globalization;
+using System.IO;
 
 namespace UpdateCompactControl
 {
@@ -70,37 +73,89 @@ namespace UpdateCompactControl
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            CheckConnection();
-            CheckVersions();
+            checkEveryThing();
         }
 
         private void btn_Refresh_Click(object sender, RoutedEventArgs e)
         {
+            checkEveryThing();
+        }
+
+        private void checkEveryThing()
+        {
+            System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             CheckConnection();
             CheckVersions();
+            System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+        }
+
+        private string checkVersion_local()
+        {
+            string localVer = "";
+
+            try
+            {
+                string pathToExe = "CompactControl.exe";
+                var versionInfo = FileVersionInfo.GetVersionInfo(pathToExe);
+                // localVer = versionInfo.FileVersion;
+
+                localVer = versionInfo.FileMajorPart + "." +
+                    versionInfo.FileMinorPart + "." +
+                    versionInfo.FileBuildPart;
+            }
+            catch (Exception)
+            {
+                localVer = "";
+                MessageBox.Show("Could not check the version of your CompactControl!",
+                    "Something went wrong!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return localVer;
+        }
+
+        private string latestVersionFull = "";
+        private string checkVersion_online()
+        {
+            string onlineVer = "";
+
+            try
+            {
+                WebRequest request = WebRequest.Create("https://github.com/saeeddiscovery/CompactControl/releases/latest");
+                using (WebResponse response = request.GetResponse())
+                {
+                    var uri = response.ResponseUri.AbsolutePath;
+                    latestVersionFull = response.ResponseUri.AbsoluteUri.ToString();
+                    string[] _onlineVer = uri.Split('/').Last().Split('-').First().Split('.');
+                    onlineVer = _onlineVer[0].Substring(1) + '.' + _onlineVer[1] + '.' + _onlineVer[2];
+                }
+            }
+            catch (Exception)
+            {
+                onlineVer = "";
+                MessageBox.Show("Could not check the online version of the CompactControl!",
+                    "Something went wrong!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return onlineVer;
         }
 
         private void CheckVersions()
         {
             lbl_LocalVersion.Content = "---";
-            lbl_LatestVersion.Content = "---";
+            lbl_onlineVersion.Content = "---";
+            
+            string localVer = checkVersion_local();
+            string onlineVer = checkVersion_online();
 
-            string localVer="0", latestVer="0";
+            if (localVer != "")
+                lbl_LocalVersion.Content = localVer;
+            if (onlineVer != "")
+                lbl_onlineVersion.Content = onlineVer;
 
-            string pathToExe = @"E:\Compact Control\Compact Control\Compact Control\bin\Release\Compact Control.exe";
-            var versionInfo = FileVersionInfo.GetVersionInfo(pathToExe);
-            localVer = versionInfo.FileVersion;
-
-            if (localVer != "0")
-                lbl_LocalVersion.Content = versionInfo.FileMajorPart + "." +
-                    versionInfo.FileMinorPart + "." +
-                    versionInfo.FileBuildPart; ;
-            /*
-            if (localVer == latestVer)
+            if (localVer == onlineVer)
                 btn_Update.IsEnabled = false;
             else
                 btn_Update.IsEnabled = true;
-            */
         }
 
         private void startDownload()
@@ -109,11 +164,25 @@ namespace UpdateCompactControl
             btn_Update.IsEnabled = false;
             Thread thread = new Thread(() => {
                 WebClient client = new WebClient();
-                Uri myUrl = new Uri("http://www.aitintech.ir/wp-content/themes/astra/screenshot.jpg");
+
+            //WebRequest request = WebRequest.Create("https://github.com/saeeddiscovery/CompactControl/releases/download/v2.1.2-rc.1/CompactControl.zip");
+                //using (WebResponse response = request.GetResponse())
+                //{
+                //    var uri = response.ResponseUri;
+                //    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
+                //    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                //    client.DownloadFileAsync(uri, @"CompactControl.zip");
+                //}
+
+                string urlLatest = latestVersionFull + "/CompactControl.zip";
+                urlLatest = urlLatest.Replace("tag", "download");
+                Uri myUrl = new Uri(urlLatest);
                 //client.Credentials = new NetworkCredential("Userid", "mypassword");
                 client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
                 client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                client.DownloadFileAsync(myUrl, @"screenshot.jpg");
+                client.DownloadFileAsync(myUrl, @"CompactControl.zip");
+
+
             });
             thread.Start();
         }
@@ -123,7 +192,7 @@ namespace UpdateCompactControl
                 double bytesIn = double.Parse(e.BytesReceived.ToString());
                 double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
                 double percentage = bytesIn / totalBytes * 100;
-                lbl_Download.Content = "Downloaded " + e.BytesReceived + " of " + e.TotalBytesToReceive;
+                lbl_Download.Content = "Downloaded " + e.BytesReceived/1024 + " of " + e.TotalBytesToReceive/1024 + " KBs";
                 progress_Download.Value = int.Parse(Math.Truncate(percentage).ToString());
             });
         }
