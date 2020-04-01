@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UpdateCompactControl"
         mc:Ignorable="d"
-        Title="Update Compact Control" Height="200" Width="376" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+        Title="Update Compact Control" Height="200" Width="376" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Activated="MainWindow1_Activated">
     <Grid Margin="0" UseLayoutRounding="False" ClipToBounds="True">
         <Border BorderBrush="#FFAEAEAE" BorderThickness="1" CornerRadius="15" Margin="5" Padding="0" Height="160" VerticalAlignment="Center" Width="355" HorizontalAlignment="Center">
         </Border>
@@ -14,7 +14,10 @@
             <Label x:Name="lbl_Download" Content="---" VerticalAlignment="Center" Margin="0,0,0,2" HorizontalAlignment="Center" Foreground="#FF00153A"/>
         </Grid>
         <Label Content="Internet : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,7,0,138" Width="65"/>
-        <Button x:Name="btn_Refresh" Margin="318,11,12,120" Cursor="Hand" ToolTip="Refresh" Click="btn_Refresh_Click" HorizontalAlignment="Center" Width="40" BorderBrush="{x:Null}" BorderThickness="1" SnapsToDevicePixels="True" Height="40" VerticalAlignment="Center" Background="{x:Null}">
+        <Button x:Name="btn_Refresh" Margin="322,10,12,125" Cursor="Hand" ToolTip="Refresh" Click="btn_Refresh_Click" HorizontalAlignment="Center" Width="36" BorderBrush="{x:Null}" BorderThickness="1" SnapsToDevicePixels="True" Height="36" VerticalAlignment="Center">
+            <Button.Background>
+                <ImageBrush ImageSource="refresh_icon.png" Stretch="Uniform"/>
+            </Button.Background>
             <StackPanel HorizontalAlignment="Stretch">
                 <StackPanel.Background>
                     <SolidColorBrush Color="White" Opacity="0"/>

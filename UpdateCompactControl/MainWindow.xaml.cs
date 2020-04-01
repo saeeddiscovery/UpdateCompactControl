@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Net.NetworkInformation;
 using System.ComponentModel;
 using System.Threading;
 using System.Net;
 using System.Diagnostics;
-using System.Net;
-using System.Globalization;
+using System.IO.Compression;
 using System.IO;
 
 namespace UpdateCompactControl
@@ -73,15 +69,13 @@ namespace UpdateCompactControl
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            checkEveryThing();
+            System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            CheckConnection();
+            CheckVersions();
+            System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
         }
 
         private void btn_Refresh_Click(object sender, RoutedEventArgs e)
-        {
-            checkEveryThing();
-        }
-
-        private void checkEveryThing()
         {
             System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             CheckConnection();
@@ -186,6 +180,7 @@ namespace UpdateCompactControl
             });
             thread.Start();
         }
+
         void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)delegate {
@@ -196,17 +191,38 @@ namespace UpdateCompactControl
                 progress_Download.Value = int.Parse(Math.Truncate(percentage).ToString());
             });
         }
+
         void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)delegate {
                 lbl_Download.Content = "Completed";
             });
+
+            string tempDir = "tmp";
+            // Extract downloaded files to the temp dir
+            Directory.CreateDirectory(tempDir);
+            extractToTemp("CompactControl.zip", tempDir);
+            string[] tmpFiles = Directory.GetFiles(tempDir);
+
+            // Backup previous files
+            string[] fileList = { "CompactControl.exe", "CompactControl.exe.config" };
+            foreach (var item in fileList)
+            {
+                if (File.Exists(item + ".bak"))
+                    File.Delete(item + ".bak");
+                File.Move(item, item + ".bak");
+                File.Copy(tempDir +"/" + item, item);
+            }
+            MessageBox.Show("Updated Successfully!", "Update Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+            Directory.Delete(tempDir, true);
+            File.Delete("CompactControl.zip");
         }
 
-        private void btn_Close_Click(object sender, RoutedEventArgs e)
+        private void extractToTemp(string zipFile, string tempDir)
         {
-            Application curApp = Application.Current;
-            curApp.Shutdown();
+            if (Directory.Exists(tempDir))
+                Directory.Delete(tempDir, true);
+            ZipFile.ExtractToDirectory(zipFile, tempDir);
         }
 
         private void btn_Update_Click(object sender, RoutedEventArgs e)
@@ -215,5 +231,18 @@ namespace UpdateCompactControl
             startDownload();
         }
 
+        private void btn_Close_Click(object sender, RoutedEventArgs e)
+        {
+            Application curApp = Application.Current;
+            curApp.Shutdown();
+        }
+
+        private void MainWindow1_Activated(object sender, EventArgs e)
+        {
+            System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            CheckConnection();
+            CheckVersions();
+            System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+        }
     }
 }
