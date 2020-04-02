@@ -1,10 +1,12 @@
 ## [1.0.0-rc.1] - 2020-04-02
 > **Added**
->> - Online version check
+>> - Download online version
 >> - Backup current version
 >> - Replace with the downloaded version
 
 
 ## [0.1.2-rc.1] - 2020-03-31
-> **Added**
->> - Online version check
+> - **Added**
+>> - Check internet connection
+>> - Check Local version 
+>> - Check online version check
