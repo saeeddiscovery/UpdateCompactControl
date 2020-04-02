@@ -1,7 +1,7 @@
 # UpdateCompactControl
 
 [!["Language"](https://img.shields.io/github/languages/top/saeeddiscovery/UpdateCompactControl.svg)](https://docs.microsoft.com/en-us/dotnet/csharp)
-[![Publish](https://github.com/saeeddiscovery/UpdateCompactControl/workflows/Publish/badge.svg?branch=master)](https://github.com/saeeddiscovery/UpdateCompactControl/runs/549304837?check_suite_focus=true)
+[![Publish](https://github.com/saeeddiscovery/UpdateCompactControl/workflows/Publish/badge.svg?branch=master)](https://github.com/saeeddiscovery/UpdateCompactControl/actions?query=workflow%3APublish)
 
 [!["Latest Release"](https://img.shields.io/github/v/release/saeeddiscovery/UpdateCompactControl.svg)](https://github.com/saeeddiscovery/UpdateCompactControl/releases/latest)
 [!["Release Date"](https://img.shields.io/github/release-date/saeeddiscovery/UpdateCompactControl.svg)](https://github.com/saeeddiscovery/UpdateCompactControl/releases/latest)
