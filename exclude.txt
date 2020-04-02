@@ -1,2 +1,0 @@
-UpdateCompactControl.exe.config
-UpdateCompactControl.pdb

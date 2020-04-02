@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UpdateCompactControl"
         mc:Ignorable="d"
-        Title="Update Compact Control" Height="200" Width="376" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Activated="MainWindow1_Activated">
+        Title="Update Compact Control" Height="200" Width="376" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
     <Grid Margin="0" UseLayoutRounding="False" ClipToBounds="True">
         <Border BorderBrush="#FFAEAEAE" BorderThickness="1" CornerRadius="15" Margin="5" Padding="0" Height="160" VerticalAlignment="Center" Width="355" HorizontalAlignment="Center">
         </Border>
@@ -14,7 +14,8 @@
             <Label x:Name="lbl_Download" Content="---" VerticalAlignment="Center" Margin="0,0,0,2" HorizontalAlignment="Center" Foreground="#FF00153A"/>
         </Grid>
         <Label Content="Internet : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,7,0,138" Width="65"/>
-        <Button x:Name="btn_Refresh" Margin="322,10,12,125" Cursor="Hand" ToolTip="Refresh" Click="btn_Refresh_Click" HorizontalAlignment="Center" Width="36" BorderBrush="{x:Null}" BorderThickness="1" SnapsToDevicePixels="True" Height="36" VerticalAlignment="Center">
+        <Button x:Name="btn_Refresh" Margin="322,10,12,125" Cursor="Hand" ToolTip="Refresh" Click="btn_Refresh_Click" HorizontalAlignment="Center" Width="36" BorderBrush="{x:Null}" BorderThickness="1" SnapsToDevicePixels="True" Height="36" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+
             <Button.Background>
                 <ImageBrush ImageSource="refresh_icon.png" Stretch="Uniform"/>
             </Button.Background>
@@ -32,7 +33,12 @@
         <Label x:Name="lbl_Connection" Content="Not Connected" VerticalAlignment="Center" Margin="66,8,123,137" Foreground="Orange"/>
         <Label Content="Current Version (Yours) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,48,0,97" FontSize="14" Width="165"/>
         <Label x:Name="lbl_LocalVersion" Content="---" VerticalAlignment="Center" Margin="172,48,82,97" FontSize="14" Foreground="#FF008BFF" Background="{x:Null}"/>
-        <Label Content="Latest Version (Online) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,74,0,71" FontSize="14" Width="165"/>
+        <Label Content="Online Version (Latest) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,74,0,71" FontSize="14" Width="165"/>
         <Label x:Name="lbl_onlineVersion" Content="---" VerticalAlignment="Center" Margin="172,74,82,71" FontSize="14" Foreground="#FF01FF68"/>
+        <TextBlock x:Name="textBlock_changeLog" Margin="267,81,12,71" Cursor="Hand">           
+            <Hyperlink NavigateUri="https://github.com/saeeddiscovery/CompactControl/blob/master/CHANGELOG.md" RequestNavigate="Hyperlink_RequestNavigate">
+                View ChangeLog
+            </Hyperlink>
+        </TextBlock>
     </Grid>
 </Window>
