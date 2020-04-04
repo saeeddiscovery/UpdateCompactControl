@@ -5,40 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UpdateCompactControl"
         mc:Ignorable="d"
-        Title="Update Compact Control" Height="200" Width="376" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-    <Grid Margin="0" UseLayoutRounding="False" ClipToBounds="True">
-        <Border BorderBrush="#FFAEAEAE" BorderThickness="1" CornerRadius="15" Margin="5" Padding="0" Height="160" VerticalAlignment="Center" Width="355" HorizontalAlignment="Center">
-        </Border>
-        <Grid x:Name="grid_Progress" Margin="9,0,9,44" Width="352" Height="28" VerticalAlignment="Bottom">
-            <ProgressBar x:Name="progress_Download" Margin="0,7,0,8" Foreground="#FF15B2CB"/>
-            <Label x:Name="lbl_Download" Content="---" VerticalAlignment="Center" Margin="0,0,0,2" HorizontalAlignment="Center" Foreground="#FF00153A"/>
-        </Grid>
-        <Label Content="Internet : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,7,0,138" Width="65"/>
-        <Button x:Name="btn_Refresh" Margin="322,10,12,125" Cursor="Hand" ToolTip="Refresh" Click="btn_Refresh_Click" HorizontalAlignment="Center" Width="36" BorderBrush="{x:Null}" BorderThickness="1" SnapsToDevicePixels="True" Height="36" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+        Title="Update Compact Control" Height="223" Width="376" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="res/icon.png">
+    <TabControl x:Name="tabControl_main" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Width="Auto" Padding="0" Background="{x:Null}" SelectionChanged="tabControl_main_SelectionChanged">
+        <TabItem x:Name="tabItem_update" Header="Update">
+            <Grid Margin="0" UseLayoutRounding="False" ClipToBounds="True" Height="171" Width="370">
+                <Border BorderBrush="#FFAEAEAE" BorderThickness="1" CornerRadius="15" Margin="5" Padding="0" Height="160" VerticalAlignment="Center" Width="355" HorizontalAlignment="Center"/>
+                <Grid x:Name="grid_Progress" Margin="9,0,9,44" Width="352" Height="28" VerticalAlignment="Bottom">
+                    <ProgressBar x:Name="progress_Download" Margin="0,7,0,8" Foreground="#FF15B2CB"/>
+                    <Label x:Name="lbl_Download" Content="---" VerticalAlignment="Center" Margin="0,0,0,2" HorizontalAlignment="Center" Foreground="#FF00153A"/>
+                </Grid>
+                <Label Content="Internet : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,7,0,138" Width="65"/>
+                <Button x:Name="btn_Refresh" Margin="322,10,12,125" Cursor="Hand" ToolTip="Refresh" Click="btn_Refresh_Click" HorizontalAlignment="Center" Width="36" BorderBrush="{x:Null}" BorderThickness="1" SnapsToDevicePixels="True" Height="36" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
 
-            <Button.Background>
-                <ImageBrush ImageSource="refresh_icon.png" Stretch="Uniform"/>
-            </Button.Background>
-            <StackPanel HorizontalAlignment="Stretch">
-                <StackPanel.Background>
-                    <SolidColorBrush Color="White" Opacity="0"/>
-                </StackPanel.Background>
-                <Image Source="refresh_icon.png"/>
-            </StackPanel>
-        </Button>
-        <Grid Margin="185,126,11,13">
-            <Button x:Name="btn_Close" Content="Close" HorizontalAlignment="Left" Height="32" Margin="91,0,-5,0" VerticalAlignment="Top" Width="76" Click="btn_Close_Click" UseLayoutRounding="False" FontSize="12" FontWeight="Normal" Cursor="Hand" IsDefault="True"/>
-            <Button x:Name="btn_Update" Content="Update" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="84" FontSize="12" FontWeight="Normal" Cursor="Hand" Margin="2,0,0,0" Click="btn_Update_Click"/>
-        </Grid>
-        <Label x:Name="lbl_Connection" Content="Not Connected" VerticalAlignment="Center" Margin="66,8,123,137" Foreground="Orange"/>
-        <Label Content="Current Version (Yours) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,48,0,97" FontSize="14" Width="165"/>
-        <Label x:Name="lbl_LocalVersion" Content="---" VerticalAlignment="Center" Margin="172,48,82,97" FontSize="14" Foreground="#FF008BFF" Background="{x:Null}"/>
-        <Label Content="Online Version (Latest) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,74,0,71" FontSize="14" Width="165"/>
-        <Label x:Name="lbl_onlineVersion" Content="---" VerticalAlignment="Center" Margin="172,74,82,71" FontSize="14" Foreground="#FF01FF68"/>
-        <TextBlock x:Name="textBlock_changeLog" Margin="267,81,12,71" Cursor="Hand">           
-            <Hyperlink NavigateUri="https://github.com/saeeddiscovery/CompactControl/blob/master/CHANGELOG.md" RequestNavigate="Hyperlink_RequestNavigate">
-                View ChangeLog
-            </Hyperlink>
-        </TextBlock>
-    </Grid>
+                    <Button.Background>
+                        <ImageBrush ImageSource="res/refresh_icon.png" Stretch="Uniform"/>
+                    </Button.Background>
+                    <StackPanel HorizontalAlignment="Stretch">
+                        <StackPanel.Background>
+                            <SolidColorBrush Color="White" Opacity="0"/>
+                        </StackPanel.Background>
+                        <Image Source="res/refresh_icon.png"/>
+                    </StackPanel>
+                </Button>
+                <Grid Margin="185,126,11,13">
+                    <Button x:Name="btn_Close" Content="Close" HorizontalAlignment="Left" Height="32" Margin="91,0,-5,0" VerticalAlignment="Top" Width="76" Click="btn_Close_Click" UseLayoutRounding="False" FontSize="12" FontWeight="Normal" Cursor="Hand" IsDefault="True"/>
+                    <Button x:Name="btn_Update" Content="Update" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="84" FontSize="12" FontWeight="Normal" Cursor="Hand" Margin="2,0,0,0" Click="btn_Update_Click"/>
+                </Grid>
+                <Label x:Name="lbl_Connection" Content="Not Connected" VerticalAlignment="Center" Margin="66,7.02,123,138.02" Foreground="Orange"/>
+                <Grid Margin="12,48,82,71">
+                    <Label Content="Current Version (Yours) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,26" FontSize="14" Width="165"/>
+                    <Label x:Name="lbl_LocalVersion" Content="---" VerticalAlignment="Center" Margin="160,0,0,26" FontSize="14" Foreground="#FF008BFF" Background="{x:Null}"/>
+                    <Label Content="Online Version (Latest) : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1,26,0,0" FontSize="14" Width="165"/>
+                    <Label x:Name="lbl_onlineVersion" Content="---" VerticalAlignment="Center" Margin="160,26,0,0" FontSize="14" Foreground="#FF01FF68"/>
+                </Grid>
+                <TextBlock x:Name="textBlock_changeLog" Margin="267,81,12,71" Cursor="Hand"><Hyperlink NavigateUri="https://github.com/saeeddiscovery/CompactControl/blob/master/CHANGELOG.md" RequestNavigate="hyperlink_RequestNavigate"><Run Text="View ChangeLog"/></Hyperlink></TextBlock>
+                <Grid Background="#FFE5E5E5" Margin="0,0,370,171"/>
+            </Grid>
+        </TabItem>
+        <TabItem x:Name="tabItem_restore" Header="Restore">
+            <Grid>
+                <Border BorderBrush="#FFAEAEAE" BorderThickness="1" CornerRadius="15" Margin="7.5,5.5,5.5,4.54" Padding="0" Height="160" VerticalAlignment="Center" Width="355" HorizontalAlignment="Center"/>
+                <Grid Margin="12,48,80,70.04">
+                    <Label Content="Current Version : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,26" FontSize="14" Width="165"/>
+                    <Label x:Name="lbl_curentVersion" Content="---" VerticalAlignment="Center" Margin="124,0,36,26" FontSize="14" Foreground="#FF008BFF" Background="{x:Null}"/>
+                    <Label Content="Previous Version : " HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1,26,0,0" FontSize="14" Width="165"/>
+                    <Label x:Name="lbl_previousVersion" Content="---" VerticalAlignment="Center" Margin="124,26,36,0" FontSize="14" Foreground="#FF01FF68"/>
+                </Grid>
+                <Grid Margin="185,126,9,12.04">
+                    <Button x:Name="btn_Close1" Content="Close" HorizontalAlignment="Left" Height="32" Margin="91,0,-5,0" VerticalAlignment="Top" Width="76" Click="btn_Close_Click" UseLayoutRounding="False" FontSize="12" FontWeight="Normal" Cursor="Hand" IsDefault="True"/>
+                    <Button x:Name="btn_Restore" Content="Restore" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="84" FontSize="12" FontWeight="Normal" Cursor="Hand" Margin="2,0,0,0" Click="btn_Restore_Click"/>
+                </Grid>
+                <Label Content="Backup:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,7.02,0,137.06" Width="65"/>
+                <Label x:Name="lbl_backupAvailable" Content="Not Available" VerticalAlignment="Center" Margin="66,7.02,121,137.06" Foreground="Orange"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>

@@ -11,6 +11,7 @@ using System.IO.Compression;
 using System.IO;
 using System.Windows.Navigation;
 using Microsoft.Win32;
+using System.Windows.Controls;
 
 namespace UpdateCompactControl
 {
@@ -24,7 +25,12 @@ namespace UpdateCompactControl
             InitializeComponent();
         }
 
-        public static bool PingHost(string nameOrAddress)
+        private string localVer;
+        private string onlineVer;
+        private string[] updateFileList = { "CompactControl.exe", "CompactControl.exe.config" };
+        private string versionsFile = "versions.txt";
+
+        public static bool pingHost(string nameOrAddress)
         {
             bool pingable = false;
             Ping pinger = null;
@@ -50,12 +56,12 @@ namespace UpdateCompactControl
             return pingable;
         }
 
-        private void CheckConnection()
+        private void checkConnection()
         {
             System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             lbl_Connection.Content = "---";
             grid_Progress.Visibility = Visibility.Hidden;
-            if (PingHost("8.8.8.8") == false)
+            if (pingHost("8.8.8.8") == false)
             {
                 lbl_Connection.Content = "Not Connected";
                 lbl_Connection.Foreground = Brushes.Orange;
@@ -70,17 +76,17 @@ namespace UpdateCompactControl
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            CheckConnection();
-            CheckVersions();
+            checkConnection();
+            checkVersions();
         }
 
         private void btn_Refresh_Click(object sender, RoutedEventArgs e)
         {
-            CheckConnection();
-            CheckVersions();
+            checkConnection();
+            checkVersions();
         }
 
-        private string pathToExe = "";
+        private string pathToExe = Directory.GetCurrentDirectory();
 
         private string checkVersion_local()
         {
@@ -154,17 +160,20 @@ namespace UpdateCompactControl
             return onlineVer;
         }
 
-        private void CheckVersions()
+        private void checkVersions()
         {
             System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             lbl_LocalVersion.Content = "---";
             lbl_onlineVersion.Content = "---";
             
-            string localVer = checkVersion_local();
-            string onlineVer = checkVersion_online();
+            localVer = checkVersion_local();
+            onlineVer = checkVersion_online();
 
             if (localVer != "")
+            {
                 lbl_LocalVersion.Content = localVer;
+                lbl_curentVersion.Content = localVer;
+            }
             if (onlineVer != "")
                 lbl_onlineVersion.Content = onlineVer;
 
@@ -176,7 +185,7 @@ namespace UpdateCompactControl
             System.Windows.Input.Mouse.OverrideCursor = null;
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
@@ -234,8 +243,7 @@ namespace UpdateCompactControl
                 string[] tmpFiles = Directory.GetFiles(tempDir);
 
                 // Backup previous files
-                string[] fileList = { "CompactControl.exe", "CompactControl.exe.config" };
-                foreach (var item in fileList)
+                foreach (var item in updateFileList)
                 {
                     if (File.Exists(Path.Combine(pathToExe, item + ".bak")))
                         File.Delete(Path.Combine(pathToExe, item + ".bak"));
@@ -246,7 +254,25 @@ namespace UpdateCompactControl
                 MessageBox.Show("Updated Successfully!", "Update Complete", MessageBoxButton.OK, MessageBoxImage.Information);
                 Directory.Delete(tempDir, true);
                 File.Delete(Path.Combine(pathToExe, "CompactControl.zip"));
-                CheckVersions();
+
+                //write versions
+                try
+                {
+                    string versionLogPath = Path.Combine(pathToExe, versionsFile);
+                    if (File.Exists(versionLogPath))
+                        File.Delete(versionLogPath);
+                    using (StreamWriter sw = new StreamWriter(versionLogPath))
+                    {
+                        sw.WriteLineAsync("Current version:" + onlineVer);
+                        sw.WriteLineAsync("Backup version:" + localVer);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Exception: " + ex.Message, "Error writing to versionLog.txt", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                checkVersions();
             });
         }
 
@@ -259,8 +285,40 @@ namespace UpdateCompactControl
 
         private void btn_Update_Click(object sender, RoutedEventArgs e)
         {
+            if (isProcessClosed("CompactControl") == false)
+                return;
+
             grid_Progress.Visibility = Visibility.Visible;
             startDownload();
+        }
+
+        private bool isProcessClosed(string processName)
+        {
+            Process[] pname = Process.GetProcessesByName(processName);
+            if (pname.Length != 0)
+            {
+                MessageBoxResult mres = MessageBox.Show(processName + " application is running.\nDo you want to close it?", processName + " running detected", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                if (mres == MessageBoxResult.No)
+                {
+                    MessageBox.Show(processName + " application must be closed for update.\nPlease close it manually and try again.", "Can not update", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    return false;
+                }
+
+                foreach (Process p in pname)
+                {
+                    try
+                    {
+                        p.Kill();
+                        p.WaitForExit(); // possibly with a timeout
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Can not close the " + processName + " application.\nPlease close it manually and try again.", "Application closing failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private void btn_Close_Click(object sender, RoutedEventArgs e)
@@ -268,5 +326,82 @@ namespace UpdateCompactControl
             Application curApp = Application.Current;
             curApp.Shutdown();
         }
+
+        private void btn_Restore_Click(object sender, RoutedEventArgs e)
+        {
+            if (isProcessClosed("CompactControl") == false)
+                return;
+
+            try
+            {
+                // Restore previous files
+                foreach (var item in updateFileList)
+                {
+                    if (File.Exists(Path.Combine(pathToExe, item)))
+                        File.Delete(Path.Combine(pathToExe, item));
+                    if (File.Exists(Path.Combine(pathToExe, item + ".bak")))
+                        File.Move(Path.Combine(pathToExe, item + ".bak"), Path.Combine(pathToExe, item));
+                }
+                MessageBox.Show("Restored Successfully!", "Restore Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                string versionLogPath = Path.Combine(pathToExe, versionsFile);
+                if (File.Exists(versionLogPath))
+                    File.Delete(versionLogPath);
+                checkVersions();
+                checkBackup();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception: " + ex.Message, "Restore Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void checkBackup()
+        {
+            bool backupExist = Directory.EnumerateFiles(pathToExe, "*.bak.*").Any();
+            // string[] bakFiles = Directory.GetFiles(pathToExe, "*.bak.*", SearchOption.TopDirectoryOnly);
+            if (backupExist)
+            {
+                lbl_backupAvailable.Content = "Available";
+                lbl_backupAvailable.Foreground = Brushes.Green;
+
+                string versionLogPath = Path.Combine(pathToExe, versionsFile);
+                if (File.Exists(versionLogPath))
+                {
+                    //read version log
+                    try
+                    {
+                        var lines = File.ReadAllLines(versionLogPath);
+                        lines = lines.Where(s => s != "").ToArray();
+                        lbl_previousVersion.Content = lines.Last().Split(':').Last();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Exception: " + ex.Message, "Error reading from versionLog.txt", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    lbl_previousVersion.Content = "?.?.?";
+                }
+
+                btn_Restore.IsEnabled = true;
+            }
+            else
+            {
+                lbl_backupAvailable.Content = "Not Available";
+                lbl_backupAvailable.Foreground = Brushes.Orange;
+                lbl_previousVersion.Content = "---";
+                btn_Restore.IsEnabled = false;
+            }
+        }
+
+        private void tabControl_main_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (tabItem_restore.IsSelected)
+            {
+                checkBackup();
+            }
+        }
+
     }
 }
