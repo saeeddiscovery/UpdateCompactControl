@@ -5,8 +5,8 @@
 [!["Release Date"](https://img.shields.io/github/release-date/saeeddiscovery/UpdateCompactControl.svg)](https://github.com/saeeddiscovery/UpdateCompactControl/releases/latest)
 
 [!["Company"](https://img.shields.io/badge/Company-AitinTech-blue.svg?style=social&logo=c)](http://AitinTech.ir/)
-[!["Contributors"](https://img.shields.io/github/contributors/saeeddiscovery/CompactControl.svg?style=social&logo=coderwall)](https://github.com/saeeddiscovery/CompactControl/graphs/contributors)
-[!["GUI-WPF"](https://img.shields.io/badge/Made%20with-WPF-brightgreen.svg?style=social&logo=Microsoft)]()
+[!["Contributors"](https://img.shields.io/github/contributors/saeeddiscovery/CompactControl.svg?style=social&logo=visual%20studio)](https://github.com/saeeddiscovery/CompactControl/graphs/contributors)
+[!["GUI-WPF"](https://img.shields.io/badge/Made%20with-WPF-brightgreen.svg?style=social&logo=windows)]()
 
 
 ## Application to update the CompactControl application to the latest release
