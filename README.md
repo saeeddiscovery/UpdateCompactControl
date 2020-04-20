@@ -3,10 +3,10 @@
 [!["Language"](https://img.shields.io/github/languages/top/saeeddiscovery/UpdateCompactControl.svg)](https://docs.microsoft.com/en-us/dotnet/csharp)
 [!["Latest Release"](https://img.shields.io/github/v/release/saeeddiscovery/UpdateCompactControl.svg)](https://github.com/saeeddiscovery/UpdateCompactControl/releases/latest)
 [!["Release Date"](https://img.shields.io/github/release-date/saeeddiscovery/UpdateCompactControl.svg)](https://github.com/saeeddiscovery/UpdateCompactControl/releases/latest)
-[![Publish](https://github.com/saeeddiscovery/UpdateCompactControl/workflows/Publish/badge.svg?branch=master)](https://github.com/saeeddiscovery/UpdateCompactControl/actions?query=workflow%3APublish)
 
-[![Generic badge](https://img.shields.io/badge/Company-AitinTech-blue.svg)](http://AitinTech.ir/)
-[!["Contributors"](https://img.shields.io/github/contributors/saeeddiscovery/CompactControl.svg)](https://github.com/saeeddiscovery/CompactControl/graphs/contributors)
+[!["Company"](https://img.shields.io/badge/Company-AitinTech-blue.svg?style=social&logo=c)](http://AitinTech.ir/)
+[!["Contributors"](https://img.shields.io/github/contributors/saeeddiscovery/CompactControl.svg?style=social&logo=coderwall)](https://github.com/saeeddiscovery/CompactControl/graphs/contributors)
+[!["GUI-WPF"](https://img.shields.io/badge/Made%20with-WPF-brightgreen.svg?style=social&logo=Microsoft)]()
 
 
 ## Application to update the CompactControl application to the latest release
